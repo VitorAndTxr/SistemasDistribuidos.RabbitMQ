@@ -5,7 +5,7 @@
         RequestSpecialistDoctor,
         EmergencyMedicalResponse,
         NurseryMedicalResponse,
-        HospitalizationRequest,
+        PatientAdmissionRequest,
         RoomRequest,
         PatientRelease
     }

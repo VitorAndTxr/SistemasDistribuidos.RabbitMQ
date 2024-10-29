@@ -18,14 +18,14 @@ public class ProntoSocorroServices
     public void RequestSpecialistDoctor(string message)
     {
         MessageEncodeProtocol messageEncodeProtocol = new MessageEncodeProtocol();
+
         Console.WriteLine("RequestSpecialistDoctor");
-        
 
         using var connection = RabbitMQConnector.CreateConnection();
 
         using var channel = RabbitMQConnector.CreateChannel(connection);
 
-        channel.ExchangeDeclare(_configuration[key: "MedicalRequestExchangeName"].ToLower(), type: ExchangeType.Direct);
+        channel.ExchangeDeclare(_configuration[key: "SpecialistDoctorRequestExchangeName"].ToLower(), type: ExchangeType.Direct);
 
         var privateKey = _configuration["PrivateKey"];
 
@@ -33,14 +33,13 @@ public class ProntoSocorroServices
 
         var body = Encoding.UTF8.GetBytes(encodedMessage);
 
-        channel.BasicPublish(_configuration[key: "MedicalRequestExchangeName"].ToLower(),
+        channel.BasicPublish(_configuration[key: "SpecialistDoctorRequestExchangeName"].ToLower(),
                              routingKey: RoutineKeyNamesEnum.RequestSpecialistDoctor.ToString().ToLower(),
                              basicProperties: null,
                              body: body);
-
-        Console.WriteLine($"Sent MedicalRequest:{encodedMessage}");
     }
-    public Task ListenEmergencyMedicalResponseQueueAsync()
+
+    public Task ListenSpecialistDoctorAnswerQueueAsync()
     {
         return Task.Run(() =>
         {
@@ -51,16 +50,16 @@ public class ProntoSocorroServices
             using var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
 
-            channel.ExchangeDeclare(exchange: config["MedicalRequestExchangeName"], type: ExchangeType.Direct);
+            channel.ExchangeDeclare(exchange: config["SpecialistDoctorAnswerExchangeName"].ToLower(), type: ExchangeType.Fanout);
 
             var queueName = channel.QueueDeclare().QueueName;
 
             channel.QueueBind(queue: queueName,
-                              exchange: config["MedicalRequestExchangeName"],
-                              routingKey: RoutineKeyNamesEnum.EmergencyMedicalResponse.ToString());
+                              exchange: config["SpecialistDoctorAnswerExchangeName"].ToLower(),
+                              routingKey: RoutineKeyNamesEnum.EmergencyMedicalResponse.ToString().ToLower());
 
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, ea) => HandleMessageConsumer(model, ea);
+            consumer.Received += (model, ea) => HandleEmergencyMedicalResponse(model, ea);
 
             channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
 
@@ -69,7 +68,7 @@ public class ProntoSocorroServices
         });
     }
 
-    static void HandleMessageConsumer(object model, BasicDeliverEventArgs ea)
+    static void HandleEmergencyMedicalResponse(object model, BasicDeliverEventArgs ea)
     {
         IConfigurationRoot config = InitConfigurations();
 

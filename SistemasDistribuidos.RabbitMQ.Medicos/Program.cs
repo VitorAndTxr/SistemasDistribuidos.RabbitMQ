@@ -5,7 +5,7 @@ internal class Program
     private static void Main(string[] args)
     {
         MedicosService medicosService = new MedicosService();
-        medicosService.ListenEmergencyMedicalRequestQueue();
+        medicosService.ListenSpecialistDoctorRequestQueue();
 
         while (true)
         {
@@ -13,6 +13,8 @@ internal class Program
             Console.ReadKey();
             medicosService.AnswerSpecialistDoctorRequest("Validado Emergencia",RoutineKeyNamesEnum.EmergencyMedicalResponse);
             medicosService.AnswerSpecialistDoctorRequest("Validado Enfermaria", RoutineKeyNamesEnum.NurseryMedicalResponse);
+            medicosService.RequestPatientAdmission();
+
         }
     }
 }

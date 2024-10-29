@@ -4,7 +4,7 @@ internal class Program
     private static void Main(string[] args)
     {
         ProntoSocorroServices prontoSocorroServices = new ProntoSocorroServices();
-        prontoSocorroServices.ListenEmergencyMedicalResponseQueueAsync();
+        prontoSocorroServices.ListenSpecialistDoctorAnswerQueueAsync();
 
         while (true)
         {
