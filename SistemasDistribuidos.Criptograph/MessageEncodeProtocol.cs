@@ -37,6 +37,9 @@ namespace SistemasDistribuidos.Cryptography
         {
             if(messageHeader == null)
             {
+                Console.WriteLine("");
+                Console.WriteLine("Assinatura válida: " + false);
+                Console.WriteLine("");
                 return false;
             }
 
@@ -55,6 +58,9 @@ namespace SistemasDistribuidos.Cryptography
 
                     // Verificar a assinatura
                     bool isValid = rsa.VerifyHash(hash, signatureBytes, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                    Console.WriteLine("");
+                    Console.WriteLine("Assinatura válida: " + isValid);
+                    Console.WriteLine("");
 
                     return isValid;
                 }
@@ -85,8 +91,11 @@ namespace SistemasDistribuidos.Cryptography
                     messageHeader.Signature = Convert.ToBase64String(signature);
                     messageHeader.SenderCode = senderCode;
                     messageHeader.routineKeyNames = routineKey;
+                    Console.WriteLine("Message Enviada:" + JsonSerializer.Serialize(messageHeader));
 
-                    Console.WriteLine("Message: " + JsonSerializer.Serialize(messageHeader));
+                    Console.WriteLine("");
+                    Console.WriteLine("");
+                    
 
                     return JsonSerializer.Serialize(messageHeader);
                 }

@@ -39,7 +39,6 @@ namespace SistemasDistribuidos.RabbitMQ.Enfermaria
                                  basicProperties: null,
                                  body: body);
 
-            Console.WriteLine($"Sent MedicalRequest:{encodedMessage}");
         }
 
         public void RequestSpecialistDoctor(string message = "Solicitar Médico")
@@ -64,8 +63,6 @@ namespace SistemasDistribuidos.RabbitMQ.Enfermaria
                                  routingKey: RoutineKeyNamesEnum.RequestSpecialistDoctor.ToString().ToLower(),
                                  basicProperties: null,
                                  body: body);
-
-            Console.WriteLine($"Sent MedicalRequest:{encodedMessage}");
         }
 
         public Task ListenRoomRequest()
@@ -142,7 +139,7 @@ namespace SistemasDistribuidos.RabbitMQ.Enfermaria
                 Console.WriteLine("Invalid message");
                 return;
             }
-            var publicKey = config[(messageHeader.SenderCode + "PublicKey")];
+            var publicKey = config[("Nodes:" + messageHeader.SenderCode + "PublicKey")];
 
             if (!messageEncodeProtocol.ValidateMessage(messageHeader, publicKey))
                 Console.WriteLine("Invalid signature");
@@ -168,7 +165,7 @@ namespace SistemasDistribuidos.RabbitMQ.Enfermaria
                 Console.WriteLine("Invalid message");
                 return;
             }
-            var publicKey = config[(messageHeader.SenderCode + "PublicKey")];
+            var publicKey = config[("Nodes:" + messageHeader.SenderCode + "PublicKey")];
 
             if (!messageEncodeProtocol.ValidateMessage(messageHeader, publicKey))
                 Console.WriteLine("Invalid signature");

@@ -40,8 +40,6 @@ namespace SistemasDistribuidos.RabbitMQ.Hotelaria
                                  routingKey: RoutineKeyNamesEnum.RoomRequest.ToString().ToLower(),
                                  basicProperties: null,
                                  body: body);
-
-            Console.WriteLine($"Sent MedicalRequest:{encodedMessage}");
         }
 
         public Task ListenRequestAdmission()
@@ -112,18 +110,18 @@ namespace SistemasDistribuidos.RabbitMQ.Hotelaria
 
             MessageHeader messageHeader = JsonSerializer.Deserialize<MessageHeader>(message);
 
-            Console.WriteLine($" [x] Received {message}");
 
             if (messageHeader == null)
             {
                 Console.WriteLine("Invalid message");
                 return;
             }
-            var publicKey = config[(messageHeader.SenderCode + "PublicKey")];
+            var publicKey = config[("Nodes:"+messageHeader.SenderCode + "PublicKey")];
 
             if (!messageEncodeProtocol.ValidateMessage(messageHeader, publicKey))
                 Console.WriteLine("Invalid signature");
 
+            Console.WriteLine($" [x] Received {message}");
 
             var routingKey = ea.RoutingKey;
         }
@@ -138,18 +136,18 @@ namespace SistemasDistribuidos.RabbitMQ.Hotelaria
 
             MessageHeader messageHeader = JsonSerializer.Deserialize<MessageHeader>(message);
 
-            Console.WriteLine($" [x] Received {message}");
 
             if (messageHeader == null)
             {
                 Console.WriteLine("Invalid message");
                 return;
             }
-            var publicKey = config[(messageHeader.SenderCode + "PublicKey")];
+            var publicKey = config[("Nodes:"+messageHeader.SenderCode + "PublicKey")];
 
             if (!messageEncodeProtocol.ValidateMessage(messageHeader, publicKey))
                 Console.WriteLine("Invalid signature");
 
+            Console.WriteLine($" [x] Received {message}");
 
             var routingKey = ea.RoutingKey;
         }

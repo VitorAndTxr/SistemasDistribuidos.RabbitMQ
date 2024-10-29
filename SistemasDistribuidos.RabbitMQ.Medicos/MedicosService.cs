@@ -36,8 +36,6 @@ public class MedicosService
                              routingKey: listener.ToString().ToLower(),
                              basicProperties: null,
                              body: body);
-
-        Console.WriteLine($"Sent MedicalResponse:{message}");
     }
 
     public void RequestPatientAdmission()
@@ -55,7 +53,7 @@ public class MedicosService
         var privateKey = _configuration["PrivateKey"];
 
         var message = "Request Patient Admission";
-        var encodedMessage = messageEncodeProtocol.MountMessage(message, privateKey, AplicationNamesEnum.Hotelaria.ToString(), RoutineKeyNamesEnum.PatientAdmissionRequest);
+        var encodedMessage = messageEncodeProtocol.MountMessage(message, privateKey, AplicationNamesEnum.Medicos.ToString(), RoutineKeyNamesEnum.PatientAdmissionRequest);
 
         var body = Encoding.UTF8.GetBytes(encodedMessage);
 
@@ -63,8 +61,6 @@ public class MedicosService
                              routingKey: RoutineKeyNamesEnum.PatientAdmissionRequest.ToString().ToLower(),
                              basicProperties: null,
                              body: body);
-
-        Console.WriteLine($"Sent MedicalResponse:{message}");
     }
 
     public Task ListenSpecialistDoctorRequestQueue()
@@ -115,7 +111,7 @@ public class MedicosService
             Console.WriteLine("Invalid message");
             return;
         }
-        var publicKey = config[(messageHeader.SenderCode + "PublicKey")];
+        var publicKey = config[("Nodes:"+messageHeader.SenderCode + "PublicKey")];
 
         if (!messageEncodeProtocol.ValidateMessage(messageHeader, publicKey))
             Console.WriteLine("Invalid signature");

@@ -85,7 +85,7 @@ public class ProntoSocorroServices
             Console.WriteLine("Invalid message");
             return;
         }
-        var publicKey = config[(messageHeader.SenderCode + "PublicKey")];
+        var publicKey = config[("Nodes:"+messageHeader.SenderCode + "PublicKey")];
 
         if (!messageEncodeProtocol.ValidateMessage(messageHeader, publicKey))
             Console.WriteLine("Invalid signature");
