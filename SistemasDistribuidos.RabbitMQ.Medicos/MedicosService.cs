@@ -24,7 +24,7 @@ public class MedicosService
 
         using var channel = RabbitMQConnector.CreateChannel(connection);
 
-        channel.ExchangeDeclare(_configuration[key: "SpecialistDoctorAnswerExchangeName"].ToLower(), type: ExchangeType.Fanout);
+        channel.ExchangeDeclare(_configuration[key: "SpecialistDoctorAnswerExchangeName"].ToLower(), type: ExchangeType.Direct);
 
         var privateKey = _configuration["PrivateKey"];
 

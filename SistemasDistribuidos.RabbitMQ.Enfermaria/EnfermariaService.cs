@@ -104,7 +104,7 @@ namespace SistemasDistribuidos.RabbitMQ.Enfermaria
                 using var connection = factory.CreateConnection();
                 using var channel = connection.CreateModel();
 
-                channel.ExchangeDeclare(exchange: config["SpecialistDoctorAnswerExchangeName"].ToLower(), type: ExchangeType.Fanout);
+                channel.ExchangeDeclare(exchange: config["SpecialistDoctorAnswerExchangeName"].ToLower(), type: ExchangeType.Direct);
 
 
 
